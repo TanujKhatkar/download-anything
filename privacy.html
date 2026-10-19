@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Privacy Policy — Download Anything</title>
+<meta name="description" content="Privacy policy for the Download Anything Chrome extension. No analytics, no tracking, no accounts, no server." />
+<meta name="theme-color" content="#12142a" />
+<link rel="icon" href="assets/icon-128.png" />
+<style>
+  :root{
+    --ink:#0f1124; --ink-2:#565c74; --line:#e6e7f0;
+    --brand:#4f46e5; --brand-2:#7c3aed; --lav:#c9c6f2;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:#fff; color:var(--ink);
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:16px; line-height:1.68; -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--brand); text-decoration:none}
+  a:hover{text-decoration:underline}
+  header{
+    background:linear-gradient(150deg,#0d0f22 0%,#1d1a42 52%,#3b1d63 100%);
+    color:#fff; padding:40px 0 44px;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px}
+  .brand{display:flex; align-items:center; gap:12px; margin-bottom:22px}
+  .brand img{width:40px; height:40px; border-radius:10px}
+  .brand span{font-weight:700; font-size:15px}
+  header h1{margin:0 0 8px; font-size:34px; letter-spacing:-.8px; font-weight:800}
+  header p{margin:0; color:var(--lav); font-size:14.5px}
+  main{padding:44px 0 20px}
+  h2{font-size:20px; letter-spacing:-.2px; margin:34px 0 8px; font-weight:750}
+  h2:first-of-type{margin-top:0}
+  p, li{color:#33384f; font-size:15.5px}
+  ul{margin:8px 0 0; padding-left:20px}
+  li{margin:5px 0}
+  .lead{font-size:16.5px; color:#22263c}
+  .card{
+    border:1px solid var(--line); border-radius:14px; background:#fafaff;
+    padding:18px 20px; margin:26px 0;
+  }
+  .card p{margin:0; font-size:15px; color:#2d3250}
+  code{
+    background:#f2f1fa; border:1px solid #e3e0f5; border-radius:6px;
+    padding:1px 6px; font-size:13.5px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  footer{
+    border-top:1px solid var(--line); margin-top:44px; padding:26px 0 44px;
+    color:var(--ink-2); font-size:14px;
+  }
+  footer .wrap{display:flex; flex-wrap:wrap; gap:14px; justify-content:space-between; align-items:center}
+  footer nav{display:flex; gap:18px}
+  @media (max-width:600px){
+    header h1{font-size:27px}
+    h2{font-size:18px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <img src="assets/icon-128.png" alt="" />
+      <span>Download Anything</span>
+    </div>
+    <h1>Privacy Policy</h1>
+    <p>Last updated: 19 October 2026</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <p class="lead">
+      Download Anything is a Chrome extension that saves videos from links you provide.
+      This page explains exactly what happens to your data — in plain language.
+    </p>
+
+    <div class="card">
+      <p><strong>The short version:</strong> nothing is collected, nothing is uploaded, and no server is involved. Everything happens on your own computer.</p>
+    </div>
+
+    <h2>1. What we collect</h2>
+    <p>Nothing. The extension has no analytics, no tracking pixels, no advertising and no user accounts. There is no sign-up and no login.</p>
+
+    <h2>2. What is stored on your device</h2>
+    <p>A single setting: whether <strong>“Use browser cookies”</strong> is switched on. It is saved locally using <code>chrome.storage.local</code>, it never leaves your device, and it is never synced to any account. No other data is stored.</p>
+
+    <h2>3. How your links are handled</h2>
+    <p>Links you paste are sent to a small download engine running on your own computer at <code>127.0.0.1</code> (a loopback address, which cannot reach the internet as a server). They are not sent to us or to any third party, and they are not logged.</p>
+    <p>The engine deletes its temporary files automatically when a download finishes, and in any case within one hour.</p>
+
+    <h2>4. Clipboard</h2>
+    <p>The clipboard is read only at the moment you click the <strong>Paste</strong> button, and only to fill the link field. It is never read in the background, never stored, and never transmitted.</p>
+
+    <h2>5. Browser cookies (optional, off by default)</h2>
+    <p>If you switch on <strong>“Use browser cookies”</strong>, the local engine reads your existing browser session cookies so it can open posts that require you to be logged in — for example private or age-restricted videos you already have access to.</p>
+    <p>This happens entirely on your computer. The cookies are not copied, exported, stored or transmitted by the developer. Turning the setting off stops it immediately.</p>
+
+    <h2>6. Downloads</h2>
+    <p>Finished files are saved to your normal Downloads folder by Chrome's own download manager. The extension has no access to your existing files and does not read your download history.</p>
+
+    <h2>7. Page content and permissions</h2>
+    <ul>
+      <li><strong>activeTab</strong> — reads the address of the tab you are on, only after you click the icon, so your current video link can be filled in.</li>
+      <li><strong>scripting</strong> — an optional button scans the current tab for a plain video file already on the page. It runs only after you click it.</li>
+      <li><strong>host permission for <code>127.0.0.1:8765</code></strong> — this is the local engine on your machine, not a remote service.</li>
+    </ul>
+
+    <h2>8. Third parties</h2>
+    <p>No data is sold, rented, shared or transferred to anyone. There are no third-party SDKs, fonts, scripts or trackers on this site or in the extension.</p>
+
+    <h2>9. Children</h2>
+    <p>The extension is not directed at children under 13 and does not knowingly collect information from anyone.</p>
+
+    <h2>10. Your rights</h2>
+    <p>Because no personal data is collected or stored by the developer, there is nothing to access, correct, export or delete on our side. You can remove the single local setting at any time by uninstalling the extension.</p>
+
+    <h2>11. Changes to this policy</h2>
+    <p>If this policy changes, the updated version will be posted on this page with a new “last updated” date.</p>
+
+    <h2>12. Contact</h2>
+    <p>Questions about privacy? Open an issue on the project repository or email <a href="mailto:your-email@example.com">your-email@example.com</a>.</p>
+
+    <div class="card">
+      <p><strong>Note on third-party content:</strong> Download Anything is a neutral tool. Please use it only for content you own or have the right to save, and respect each site's terms of service and copyright law.</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© <span id="y">2026</span> Download Anything</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="index.html#install">Install</a>
+      <a href="assets/download-anything-1.0.0.zip" download>Download</a>
+    </nav>
+  </div>
+</footer>
+
+<script>document.getElementById("y").textContent = new Date().getFullYear();</script>
+</body>
+</html>

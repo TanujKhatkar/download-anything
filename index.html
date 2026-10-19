@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Download Anything — Download whatever you see in 4K</title>
+<meta name="description" content="Paste a video or post link and pick a quality: 360p to 4K, plus the original file. A Chrome extension with a local engine that keeps everything on your computer." />
+<meta name="theme-color" content="#12142a" />
+<link rel="icon" href="assets/icon-128.png" />
+<meta property="og:title" content="Download Anything" />
+<meta property="og:description" content="Download whatever you see in 4K." />
+<meta property="og:image" content="assets/shot-options.jpg" />
+<meta property="og:type" content="website" />
+<style>
+  :root{
+    --ink:#0f1124; --ink-2:#5a6079; --line:#e6e7f0; --bg:#ffffff;
+    --brand:#4f46e5; --brand-2:#7c3aed; --lav:#c9c6f2;
+    --dark:#0e1020; --dark-2:#1b1d3a;
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--brand); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative; overflow:hidden; color:#fff;
+    background:linear-gradient(150deg,#0d0f22 0%,#1d1a42 48%,#3b1d63 100%);
+    padding:64px 0 76px;
+  }
+  .hero::after{
+    content:""; position:absolute; width:760px; height:760px; right:-200px; top:-360px;
+    background:radial-gradient(circle,rgba(124,58,237,.5),transparent 62%);
+    filter:blur(10px); pointer-events:none;
+  }
+  .hero .wrap{position:relative; z-index:1}
+  .brand{display:flex; align-items:center; gap:16px}
+  .brand img{width:60px; height:60px; border-radius:14px; box-shadow:0 10px 30px rgba(79,70,229,.45)}
+  .brand h1{margin:0; font-size:30px; letter-spacing:-.4px; font-weight:800}
+  .brand p{margin:2px 0 0; font-size:15px; color:var(--lav)}
+  .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:44px; align-items:center; margin-top:44px}
+  .hero h2{font-size:44px; line-height:1.12; letter-spacing:-1.2px; margin:0 0 14px; font-weight:800}
+  .hero .lede{font-size:18px; color:#ded9ff; margin:0 0 26px; max-width:32ch}
+  .btns{display:flex; flex-wrap:wrap; gap:12px; align-items:center}
+  .btn{
+    display:inline-flex; align-items:center; gap:10px; height:52px; padding:0 26px;
+    border-radius:12px; font-weight:650; font-size:15.5px; border:0; cursor:pointer;
+    transition:transform .12s ease, filter .15s ease, background .15s ease;
+  }
+  .btn:hover{text-decoration:none; transform:translateY(-1px)}
+  .btn-primary{background:#fff; color:#1a1235}
+  .btn-primary:hover{filter:brightness(.96)}
+  .btn-ghost{background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.28)}
+  .btn-ghost:hover{background:rgba(255,255,255,.18)}
+  .meta{margin-top:16px; font-size:13px; color:#b9b4e6}
+  .hero-shot{display:flex; justify-content:center}
+  .hero-shot img{
+    width:100%; max-width:330px; height:auto; display:block;
+    filter:drop-shadow(0 28px 60px rgba(0,0,0,.55));
+  }
+
+  /* ---------- sections ---------- */
+  section{padding:64px 0}
+  .kicker{font-size:13px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--brand); margin:0 0 8px}
+  h3{font-size:30px; letter-spacing:-.6px; margin:0 0 12px; font-weight:800}
+  .sub{color:var(--ink-2); margin:0 0 32px; max-width:60ch}
+
+  .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
+  .card{border:1px solid var(--line); border-radius:var(--radius); padding:22px; background:#fff}
+  .card .n{
+    width:34px; height:34px; border-radius:10px; display:grid; place-items:center;
+    background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#fff;
+    font-weight:700; font-size:14px; margin-bottom:14px;
+  }
+  .card h4{margin:0 0 6px; font-size:16.5px}
+  .card p{margin:0; font-size:14.5px; color:var(--ink-2); line-height:1.55}
+
+  .qualities{display:flex; flex-wrap:wrap; gap:10px; margin-top:6px}
+  .q{
+    border:1px solid var(--line); background:#fbfaff; border-radius:10px;
+    padding:9px 14px; font-weight:650; font-size:14px; color:#2b2455;
+  }
+  .q.orig{background:linear-gradient(135deg,#f5f2ff,#fdfbff); border-color:#d8d2ff}
+
+  /* ---------- steps ---------- */
+  .steps{counter-reset:s; display:grid; gap:14px}
+  .step{
+    display:grid; grid-template-columns:44px 1fr; gap:16px; align-items:start;
+    border:1px solid var(--line); border-radius:var(--radius); padding:20px 22px; background:#fff;
+  }
+  .step::before{
+    counter-increment:s; content:counter(s);
+    width:34px; height:34px; border-radius:50%; display:grid; place-items:center;
+    background:#1b1d3a; color:#fff; font-weight:700; font-size:14px; margin-top:2px;
+  }
+  .step h4{margin:0 0 4px; font-size:16px}
+  .step p{margin:0; font-size:14.5px; color:var(--ink-2)}
+  code{
+    background:#f2f1fa; border:1px solid #e3e0f5; border-radius:6px;
+    padding:1px 6px; font-size:13px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+
+  .gallery{display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:start}
+  .gallery figure{margin:0; display:flex; flex-direction:column; align-items:center; gap:12px}
+  .gallery img{
+    width:100%; max-width:330px; height:auto; display:block;
+    filter:drop-shadow(0 16px 34px rgba(20,18,50,.18));
+  }
+  .gallery figcaption{font-size:13.5px; color:var(--ink-2); text-align:center; max-width:34ch}
+
+  .note{
+    border:1px solid #ffe2b8; background:#fffaf1; color:#7a5316;
+    border-radius:14px; padding:18px 20px; font-size:14.5px;
+  }
+  .note strong{color:#5c3d0d}
+
+  .sites{display:flex; flex-wrap:wrap; gap:8px}
+  .pill{border:1px solid var(--line); border-radius:999px; padding:6px 13px; font-size:13.5px; color:#3a3f57; background:#fafaff}
+
+  /* ---------- faq ---------- */
+  details{border:1px solid var(--line); border-radius:12px; padding:16px 20px; margin-bottom:10px; background:#fff}
+  details summary{cursor:pointer; font-weight:650; font-size:15.5px}
+  details p{margin:10px 0 0; color:var(--ink-2); font-size:14.5px}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line); padding:34px 0 44px; color:var(--ink-2); font-size:14px}
+  .foot-row{display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:center}
+  .foot-brand{display:flex; align-items:center; gap:10px; color:var(--ink); font-weight:700}
+  .foot-brand img{width:26px; height:26px; border-radius:7px}
+  footer nav{display:flex; gap:20px; flex-wrap:wrap}
+
+  @media (max-width:520px){
+    .brand{gap:12px}
+    .brand img{width:48px; height:48px; border-radius:11px}
+    .brand h1{font-size:22px; white-space:nowrap; letter-spacing:-.5px}
+    .brand p{font-size:13px}
+    .hero h2{font-size:30px; letter-spacing:-.8px}
+    .hero .lede{font-size:16.5px}
+    .btns{gap:10px}
+    .btn{width:100%; justify-content:center; height:50px}
+    .hero-shot img{max-width:290px}
+    h3{font-size:25px}
+  }
+
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr; gap:30px}
+    .hero h2{font-size:34px}
+    .cards{grid-template-columns:1fr}
+    .gallery{grid-template-columns:1fr}
+    .hero{padding:44px 0 54px}
+    section{padding:48px 0}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="brand">
+      <img src="assets/icon-128.png" alt="Download Anything icon" />
+      <div>
+        <h1>Download Anything</h1>
+        <p>Download whatever you see in 4K</p>
+      </div>
+    </div>
+
+    <div class="hero-grid">
+      <div>
+        <h2>Paste a link.<br />Pick a quality.<br />Done.</h2>
+        <p class="lede">One bar, one list, one download. From 360p to 4K, plus the untouched original file.</p>
+        <div class="btns">
+          <a class="btn btn-primary" href="assets/download-anything-1.0.0.zip" download>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10.5 12 15.5l5-5"/><path d="M4 20h16"/></svg>
+            Download the extension
+          </a>
+          <a class="btn btn-ghost" href="#install">How to install</a>
+        </div>
+        <p class="meta">v1.0.0 · 34 KB · Chrome, Edge and other Chromium browsers · Windows, macOS, Linux</p>
+      </div>
+      <div class="hero-shot">
+        <img src="assets/popup-options.png" alt="The Download Anything popup showing quality options from 360p to 4K, plus Original quality" />
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section>
+    <div class="wrap">
+      <p class="kicker">What you get</p>
+      <h3>Simple by design</h3>
+      <p class="sub">No format tables. No audio-only buttons. No clutter — just the video you asked for, at the quality you chose.</p>
+      <div class="cards">
+        <div class="card">
+          <div class="n">1</div>
+          <h4>Paste is a button</h4>
+          <p>It sits right next to the link box. Copy a link anywhere, click the icon, click Paste — the options appear instantly.</p>
+        </div>
+        <div class="card">
+          <div class="n">2</div>
+          <h4>Every real quality</h4>
+          <p>Only the resolutions that video actually has. Nothing fake, nothing broken.</p>
+        </div>
+        <div class="card">
+          <div class="n">3</div>
+          <h4>Private by design</h4>
+          <p>The engine runs on your own computer. No account, no upload, no tracking. Your links never leave your machine.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <p class="kicker">Quality options</p>
+        <div class="qualities">
+          <span class="q">360p</span>
+          <span class="q">480p</span>
+          <span class="q">720p</span>
+          <span class="q">1080p</span>
+          <span class="q">1440p · 2K</span>
+          <span class="q">2160p · 4K</span>
+          <span class="q orig">Original quality</span>
+        </div>
+        <p class="sub" style="margin:14px 0 0">“Original” is the untouched best file the site serves — never re-encoded. Picture and sound are merged into one ordinary MP4 or WEBM that plays anywhere.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#fafaff; border-top:1px solid var(--line); border-bottom:1px solid var(--line)">
+    <div class="wrap">
+      <p class="kicker">Install</p>
+      <h3>Two minutes, one time</h3>
+      <p class="sub">You need both parts: the extension (the interface) and the engine (the downloader). Both are in the zip.</p>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <h4>Download and unzip the package</h4>
+            <p>Grab <a href="assets/download-anything-1.0.0.zip" download>download-anything-1.0.0.zip</a> and extract it somewhere you will keep it.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h4>Load the extension</h4>
+            <p>Open <code>chrome://extensions</code>, turn on <strong>Developer mode</strong>, click <strong>Load unpacked</strong> and choose the <code>extension</code> folder. Pin the icon.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h4>Start the engine</h4>
+            <p>Open the <code>engine</code> folder and double-click <code>Start Download Engine.bat</code> (Windows) or <code>Start Download Engine.command</code> (macOS). First run installs its own components — it needs Python 3.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h4>Paste, pick, done</h4>
+            <p>Click the icon, press <strong>Paste</strong>, choose a quality. The file lands in your Downloads folder.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="note" style="margin-top:24px">
+        <strong>Heads up:</strong> the extension needs the engine running on the same computer. That is deliberate — it is what keeps your links and files off any server. If the engine is not running, the popup tells you exactly how to start it.
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="kicker">Screenshots</p>
+      <h3>This is the whole app</h3>
+      <p class="sub">No side panels, no settings maze. The popup is the product.</p>
+      <div class="gallery">
+        <figure>
+          <img src="assets/popup-options.png" alt="Quality list from 360p to Original quality" />
+          <figcaption>Pick any resolution — only the ones that video really has.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/popup-progress.png" alt="Live download progress with speed and time left" />
+          <figcaption>Live speed and time left, then Chrome saves the file.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#fafaff; border-top:1px solid var(--line); border-bottom:1px solid var(--line)">
+    <div class="wrap">
+      <p class="kicker">Supported sites</p>
+      <h3>1000+ sites, including</h3>
+      <div class="sites">
+        <span class="pill">YouTube</span><span class="pill">Instagram</span><span class="pill">Facebook</span>
+        <span class="pill">X / Twitter</span><span class="pill">TikTok</span><span class="pill">Vimeo</span>
+        <span class="pill">Reddit</span><span class="pill">LinkedIn</span><span class="pill">Pinterest</span>
+        <span class="pill">Twitch</span><span class="pill">Dailymotion</span><span class="pill">Rumble</span>
+        <span class="pill">Streamable</span><span class="pill">and many more</span>
+      </div>
+      <p class="sub" style="margin-top:18px">Private or age-restricted posts work when you tick <strong>Use browser cookies</strong> in the popup — that reuses your own logged-in session locally.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="kicker">Questions</p>
+      <h3>Good to know</h3>
+
+      <details>
+        <summary>Why does the extension need a separate engine?</summary>
+        <p>Browsers cannot fetch video from sites like YouTube or Instagram — the streams are signed, expire quickly, and are blocked by cross-origin rules. Those pages have to be read and the stream decoded outside the browser. The engine does that on your computer, so nothing passes through a server.</p>
+      </details>
+
+      <details>
+        <summary>Does it work on Netflix, Prime Video or Disney+?</summary>
+        <p>No. Those use DRM and cannot be downloaded by any tool — including this one. The same goes for paid Spotify.</p>
+      </details>
+
+      <details>
+        <summary>Where do my downloads go?</summary>
+        <p>Into your normal Downloads folder, saved by Chrome itself. The extension has no access to your existing files.</p>
+      </details>
+
+      <details>
+        <summary>Is anything uploaded anywhere?</summary>
+        <p>No. There is no account, no analytics, no tracking and no server operated by this project. The only stored setting is whether “Use browser cookies” is on, and it stays on your device.</p>
+      </details>
+
+      <details>
+        <summary>A download fails after a site update. What do I do?</summary>
+        <p>Update the engine. Open a terminal and run <code>python -m pip install -U yt-dlp</code>, then restart the engine. Site changes are fixed there within days.</p>
+      </details>
+
+      <details>
+        <summary>Is this legal to use?</summary>
+        <p>Use it only for content you own or have the right to save, and respect each site's terms of service and copyright law. The tool is neutral; your use is what matters.</p>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-row">
+    <div class="foot-brand">
+      <img src="assets/icon-128.png" alt="" />
+      Download Anything
+    </div>
+    <nav>
+      <a href="privacy.html">Privacy policy</a>
+      <a href="assets/download-anything-1.0.0.zip" download>Download</a>
+      <a href="#install">Install</a>
+    </nav>
+    <div>Download whatever you see in 4K</div>
+  </div>
+</footer>
+
+</body>
+</html>
